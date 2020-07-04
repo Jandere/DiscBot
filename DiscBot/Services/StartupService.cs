@@ -1,35 +1,33 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
-using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using DiscBot.Shared;
 
 namespace DiscBot.Services
 {
     public class StartupService
     {
-        private readonly IServiceProvider provider;
-        private readonly DiscordSocketClient discord;
-        private readonly CommandService commands;
+        private readonly IServiceProvider _provider;
+        private readonly DiscordSocketClient _discord;
+        private readonly CommandService _commands;
 
         public StartupService(IServiceProvider service, DiscordSocketClient discord, CommandService commands)
         {
-            this.commands = commands;
-            this.provider = service;
-            this.discord = discord;
+            this._commands = commands;
+            this._provider = service;
+            this._discord = discord;
         }
 
         public async Task StartAsync()
         {
-            string discordToken = "NzI2Mzg2OTc2NjQ2ODg5NTAz.Xvc3oA.Xw65rpH3zlFUoBVkVYiul2zwARU";
+            string discordToken = ImportantStrings.BotToken;
 
-            await discord.LoginAsync(Discord.TokenType.Bot, discordToken);
-            await discord.StartAsync();
+            await _discord.LoginAsync(Discord.TokenType.Bot, discordToken);
+            await _discord.StartAsync();
 
-            await commands.AddModulesAsync(Assembly.GetEntryAssembly(), provider);
+            await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _provider);
         }
     }
 }
